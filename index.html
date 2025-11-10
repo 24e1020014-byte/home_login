@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bakes Saigon | Birthday Cakes</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/header.css" />
+</head>
+
+
+
+<body>
+
+  <!-- 🔹 LOGIN MODAL -->
+<div id="loginModal" class="login-modal">
+  <div class="login-modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Đăng nhập</h2>
+    <form id="loginForm">
+      <label for="username">Tài khoản:</label>
+      <input type="text" id="username" required>
+      
+      <label for="password">Mật khẩu:</label>
+      <input type="password" id="password" required>
+      
+      <button type="submit">Đăng nhập</button>
+      <p id="loginMessage" class="error"></p>
+    </form>
+  </div>
+</div>
+
+  <!-- 🔹 TOPBAR -->
+  <div class="topbar">
+    <div class="marquee">
+      <div class="marquee__wrapper">
+        <div class="marquee__item">Tung tăng chơi trăng – Now available in stores!</div>
+        <div class="marquee__item">Tung tăng chơi trăng – Now available in stores!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 HEADER -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="header-logo">
+        <a href="/" class="logo-link">
+          <img src="assets/images/BAKES__Logo-06.avif" alt="Bakes Logo">
+        </a>
+      </div>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="#">TUNG TĂNG CHƠI TRĂNG 2025</a></li>
+          <li><a href="#">B2B</a></li>
+          <li><a href="#">COMBO/GIFT</a></li>
+          <li><a href="#">BIRTHDAY CAKE</a></li>
+          <li><a href="#">ORDER FOR LATER</a></li>
+          <li><a href="#">ABOUT US</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <div class="lang-switch">
+          <select>
+            <option>EN</option>
+            <option>VN</option>
+          </select>
+        </div>
+
+        <a href="#" class="header-icon account"><i class="fa-regular fa-user"></i></a>
+        <a href="#" class="header-icon cart">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-count">2</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- 🔹 JS cho marquee -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const SPEED_PX_PER_SEC = 60;
+      const marquees = document.querySelectorAll('.marquee');
+
+      marquees.forEach(m => initMarquee(m, SPEED_PX_PER_SEC));
+      window.addEventListener('resize', debounce(() => {
+        marquees.forEach(m => initMarquee(m, SPEED_PX_PER_SEC));
+      }, 200));
+    });
+
+    function initMarquee(marqueeEl, speedPxPerSec) {
+      if (marqueeEl._marqueeStyleTag) {
+        marqueeEl._marqueeStyleTag.remove();
+        marqueeEl._marqueeStyleTag = null;
+      }
+
+      const wrapper = marqueeEl.querySelector('.marquee__wrapper');
+      const item = marqueeEl.querySelector('.marquee__item');
+      if (!wrapper || !item) return;
+
+      wrapper.innerHTML = '';
+      wrapper.appendChild(item.cloneNode(true));
+
+      void wrapper.offsetWidth;
+
+      const containerW = marqueeEl.clientWidth;
+      let safety = 0;
+      while (wrapper.scrollWidth < containerW * 2 && safety < 100) {
+        wrapper.appendChild(item.cloneNode(true));
+        safety++;
+      }
+
+      const totalWidth = wrapper.scrollWidth;
+      const slideDistance = totalWidth / 2;
+      const durationSec = Math.max(4, slideDistance / speedPxPerSec);
+
+      const keyframeName = 'marqueeAnim_' + Math.floor(Math.random() * 1e6);
+      const styleTag = document.createElement('style');
+      styleTag.innerHTML = `
+        @keyframes ${keyframeName} {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-${slideDistance}px); }
+        }`;
+      document.head.appendChild(styleTag);
+      marqueeEl._marqueeStyleTag = styleTag;
+
+      wrapper.style.animation = `${keyframeName} ${durationSec}s linear infinite`;
+    }
+
+    function debounce(fn, wait) {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+  </script>
+
+
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const loginModal = document.getElementById("loginModal");
+  const loginBtn = document.querySelector(".header-icon.account");
+  const closeBtn = loginModal.querySelector(".close-btn");
+  const loginForm = document.getElementById("loginForm");
+  const loginMessage = document.getElementById("loginMessage");
+
+  // Thông tin đăng nhập mẫu
+  const validUsername = "admin";
+  const validPassword = "12345";
+
+  // Mở popup khi click icon account
+  loginBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    loginModal.style.display = "flex";
+  });
+
+  // Đóng popup khi click dấu X
+  closeBtn.addEventListener("click", () => {
+    loginModal.style.display = "none";
+    loginForm.reset();
+    loginMessage.textContent = "";
+  });
+
+  // Đóng popup khi click ngoài nội dung
+  window.addEventListener("click", (e) => {
+    if (e.target === loginModal) {
+      loginModal.style.display = "none";
+      loginForm.reset();
+      loginMessage.textContent = "";
+    }
+  });
+
+  // Xử lý đăng nhập
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if(username === validUsername && password === validPassword){
+      loginMessage.style.color = "green";
+      loginMessage.textContent = "Đăng nhập thành công!";
+      setTimeout(() => {
+        loginModal.style.display = "none";
+        loginForm.reset();
+        loginMessage.textContent = "";
+        alert("Bạn đã đăng nhập thành công!"); // Hoặc cập nhật giao diện trang chủ
+      }, 800);
+    } else {
+      loginMessage.style.color = "red";
+      loginMessage.textContent = "Sai tài khoản hoặc mật khẩu!";
+    }
+  });
+});
+</script>
+
+
+</body>
+
+</html>
